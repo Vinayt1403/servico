@@ -1,0 +1,38 @@
+.contain{
+ display:flex;
+ flex-wrap: wrap;
+ flex-direction:column;
+ width:1270px;
+ height:200px;
+}
+.contain-item{
+  margin:10px;
+  padding:5px;
+  border:solid;
+  border-radius:5px;
+  width:33%;
+}
+
+
+.foot{
+  width:100%;
+  background-color:rgb(40, 35, 34);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+   }
+   .footer-item{
+     display:flex;
+     flex-wrap:wrap;
+     flex-direction:column;
+     margin:2%;     
+   }
+   li{
+      list-style-type:none;
+      color:azure;
+      gap: 5px;
+   }
+   li:hover{
+     transform:perspective(40px)scale3d(1.1,1.2,1.3);
+   }
+
