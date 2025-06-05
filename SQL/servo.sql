@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 07, 2024 at 03:50 PM
+-- Generation Time: May 09, 2024 at 07:12 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.0.19
 
@@ -74,7 +74,10 @@ INSERT INTO `booking_requests` (`id`, `user_id`, `provider_id`, `problem_descrip
 (67, 16, 1, 'problem in computer', 'reject', '2024-04-04 06:34:04', NULL, NULL),
 (68, 16, 1, 'computer', 'delivered', '2024-04-04 06:56:35', '2024-04-03', '122.00'),
 (69, 13, 2, 'cr crash', 'delivered', '2024-04-06 08:48:01', '2024-04-05', '4000.00'),
-(70, 18, 1, 'computer', 'delivered', '2024-04-06 09:07:38', '2024-04-05', '600.00');
+(70, 18, 1, 'computer', 'delivered', '2024-04-06 09:07:38', '2024-04-05', '600.00'),
+(71, 20, 2, 'i am stuck in a  car in kudal', 'reject', '2024-05-05 07:24:13', NULL, NULL),
+(72, 20, 2, 'i am stuck in a car in kudal', 'accept', '2024-05-05 07:26:04', '2024-05-06', '200.00'),
+(73, 20, 2, 'imy car is in problem', 'accept', '2024-05-05 07:27:06', '2024-05-06', '5000.00');
 
 -- --------------------------------------------------------
 
@@ -186,7 +189,9 @@ INSERT INTO `myrec` (`id`, `name`, `email`, `contact`, `password`, `username`, `
 (15, 'vrushali', 'vrusha@gmail.com', 2147483647, 'vrusha@123', 'vrushali', '1', 'Kudal', ''),
 (16, 'bhakti', 'bhakti19@gmail.com', 8767741181, 'qwerty', 'bhakti@19', '1', 'Kudal', ''),
 (17, 'purva', 'purva@gmail.com', 8767676767, 'qwerty', 'purva123', '2', 'Kanakavali', 'profile-pic/20240206_131945.jpg'),
-(18, 'hrutik', 'hrutik@gmail.com', 6767676767, 'qwerty', 'hrutik', '1', 'Dodamarg', NULL);
+(18, 'hrutik', 'hrutik@gmail.com', 6767676767, 'qwerty', 'hrutik', '1', 'Dodamarg', NULL),
+(19, 'Suni', 'sunil@gmail.com', 9421232323, 'qwerty@123', 'sunil@123', '1', 'Kudal', 'profile-pic/hacker.gif'),
+(20, 'puja', 'puja@gmail.com', 9596969696, 'qwerty', 'puja@123', '1', 'Kudal', NULL);
 
 -- --------------------------------------------------------
 
@@ -261,7 +266,10 @@ INSERT INTO `notifications` (`id`, `user_id`, `message`, `status`, `created_at`)
 (52, 16, 'Your request has been rejected by Rushi Computers.', 'read', '2024-04-04 06:39:58'),
 (53, 16, 'Your request has been accepted by Rushi Computers. Service Date: 2024-04-03, Expected Cost: 122.', 'unread', '2024-04-04 06:57:01'),
 (54, 13, 'Your request has been accepted by Mihir Mechanicals. Service Date: 2024-04-05, Expected Cost: 4000.', 'unread', '2024-04-06 08:51:15'),
-(55, 18, 'Your request has been accepted by Rushi Computers. Service Date: 2024-04-05, Expected Cost: 600.', 'read', '2024-04-06 09:08:26');
+(55, 18, 'Your request has been accepted by Rushi Computers. Service Date: 2024-04-05, Expected Cost: 600.', 'read', '2024-04-06 09:08:26'),
+(56, 20, 'Your request has been rejected by Mihir Mechanicals.', 'unread', '2024-05-05 07:24:37'),
+(57, 20, 'Your request has been accepted by Mihir Mechanicals. Service Date: 2024-05-06, Expected Cost: 200.', 'unread', '2024-05-05 07:26:22'),
+(58, 20, 'Your request has been accepted by Mihir Mechanicals. Service Date: 2024-05-06, Expected Cost: 5000.', 'read', '2024-05-05 07:27:30');
 
 -- --------------------------------------------------------
 
@@ -291,7 +299,7 @@ CREATE TABLE `prov` (
 --
 
 INSERT INTO `prov` (`pid`, `uid`, `category_id`, `sid`, `pname`, `pdes`, `cost`, `pemail`, `padress`, `pcity`, `state`, `pincode`, `p_aadhar`, `status`) VALUES
-(1, 11, 0, 0, 'Rushi Computers', 'Computer Hardware and Software', 200, 'rushi@gmail.com', 'tarkarli beach', 'Malvan', 'Maharashtra', '41619', '', 'valid'),
+(1, 11, 0, 0, 'Rushi Computers', 'Computer Hardware and Software', 2000, 'rushi@gmail.com', 'tarkarli', 'Malvan', 'Maharashtra', '41619', '', 'valid'),
 (2, 12, 0, 0, 'Mihir Mechanicals', 'Car Repairing and ServiceMaintainace ', 100, 'mihir@gmail.com', 'nabarwadi,kudal city', 'Kudal', 'Maharashtra', '416520', '', 'valid'),
 (16, 14, 5, 21, 'sahil sound', 'We Have DJ Sound service available for barsa, haldi,wedding,', 700, 'sahil@gmail.com', 'kudal', 'Vengurle', 'Maharashtra', '416520', 'adhar/paddleball.jpg', 'valid'),
 (18, 13, 9, 30, 'harshal tours', 'tours and travels', 2000, 'harshal@gmail.com', 'shiroda', 'Vengurle', 'Maharashtra', '416520', 'adhar/20240206_124243.jpg', 'valid'),
@@ -412,7 +420,7 @@ ALTER TABLE `services`
 -- AUTO_INCREMENT for table `booking_requests`
 --
 ALTER TABLE `booking_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -436,13 +444,13 @@ ALTER TABLE `feedback`
 -- AUTO_INCREMENT for table `myrec`
 --
 ALTER TABLE `myrec`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `prov`

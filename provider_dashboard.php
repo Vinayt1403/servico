@@ -2,7 +2,15 @@
 session_start();
 include("connection.php");
 $uid = $_SESSION["myuser2"];
-//echo "Logged in as: " . htmlspecialchars($uid, ENT_QUOTES, 'UTF-8'); // Safely display user ID
+$em=mysqli_query($db,"select * from myrec where id='$uid'");
+if($em)
+{
+    while ($data = mysqli_fetch_assoc($em)) {
+       $email = $data['email'];
+    }
+}
+
+
 $res = mysqli_query($db, "SELECT p.pid FROM prov p WHERE p.uid = '$uid'");
 if ($res) {
     while ($data = mysqli_fetch_assoc($res)) {
@@ -133,7 +141,50 @@ if ($res) {
   button[name="submit"]:hover {
     background-color: #0056b3;
   }
-    </style>
+
+ /*table*/
+
+ table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px; 
+        border: 2px solid #007bff; 
+    }
+
+    th {
+        background-color: #007bff; 
+        color: white; 
+        padding: 10px; 
+    }
+
+    td {
+        padding: 10px; 
+        border: 1px solid #ddd;
+    }
+
+    .form-control {
+        width: calc(100% - 20px); 
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+
+    .btn-update {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .btn-update:hover {
+        background-color: #0056b3;
+    }
+</style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-light bg-dark">
@@ -150,7 +201,7 @@ if ($res) {
              <li class="nav-item">
               <a class="nav-link" href="#">
               <?php 
-                echo($uid);
+                echo($email);
                 ?>
                 </a>
             </li>&nbsp;&nbsp;
@@ -187,43 +238,92 @@ while($data=mysqli_fetch_array($sqli))
 ?>
 <h4><?php echo htmlentities($data['pname']);?>'s Service Details</h4>
 <hr />													
-<form role="form" name="edit" method="post">
-												
-	<div class="form-group">
-		<label for="fname">
-		</label>
-		<input type="text" name="fname" class="form-control" value="<?php echo htmlentities($data['pemail']);?>" >
-	</div>
+<table>
+    <form role="form" name="edit" method="post">
+        <tr>
+        <th><b>Email</b></th>
+            <td><input type="text" name="fname" class="form-control" value="<?php echo htmlentities($data['pemail']);?>" ></td>
+            <td><button type="submit" class="btn btn-info" name="update_email" >Update</button></td>
+        </tr>
 
-    <div class="form-group">
-	  <label for="address">Description</label>
-       <textarea name="address" class="form-control"><?php echo htmlentities($data['pdes']);?></textarea>
-      </div>
+        <tr>
+        <th><b>Description</b></th>
+            <td><textarea name="address" class="form-control"><?php echo htmlentities($data['pdes']);?></textarea></td>
+            <td><button type="submit" class="btn btn-info" name="update_description">Update</button></td>
+        </tr>
 
-     <div class="form-group">
-	  <label for="address">Address</label>
-       <textarea name="address" class="form-control"><?php echo htmlentities($data['padress']);?></textarea>
-      </div>
+        <tr>
+        <th><b>Adress</b></th>
+            <td><textarea name="des" class="form-control"><?php echo htmlentities($data['padress']);?></textarea></td>
+            <td><button type="submit" class="btn btn-info" name="update_address">Update</button></td>
+        </tr>
 
-      <div class="form-group">
-	     <label for="city">City</label>
-		<input type="text" name="city" class="form-control" required="required"  value="<?php echo htmlentities($data['pcity']);?>" >
-      </div>
-     <div class="form-group">
-		<label for="bg">Cost</label>
-		<input type="text" name="bg" class="form-control" value="<?php echo htmlentities($data['cost']);?>" >
-      </div>
+        <tr>
+        <th><b>City</b></th>
+            <td><input type="text" name="city" class="form-control" required="required"  value="<?php echo htmlentities($data['pcity']);?>" ></td>
+            <td><button type="submit" class="btn btn-info" name="update_city" >Update</button></td>
+        </tr>
 
-      <div class="form-group">
-		<label for="bg">Pincode</label>
-		<input type="text" name="bg" class="form-control" value="<?php echo htmlentities($data['pincode']);?>" >
-      </div>
+        <tr>
+        <th><b>Cost</b></th>
+            <td><input type="text" name="bg" class="form-control" value="<?php echo htmlentities($data['cost']);?>" ></td>
+            <td><button type="submit" class="btn btn-info" name="update_cost" >Update</button></td>
+        </tr>
 
-      <button onclick="window.location.href='edit-details.php'" class="btn btn-o btn-primary">Edit Details</button>
- </form>
+        <tr>
+        <th><b>Pincode</b></th>
+            <td><input type="text" name="pin" class="form-control" value="<?php echo htmlentities($data['pincode']);?>" ></td>
+            <td><button type="submit" class="btn btn-info" name="update_pincode" >Update</button></td>
+        </tr>
+
+    </form>
+</table>
    <?php } ?>
 </div>
 
+<?php
+include("connection.php");
+
+
+if(isset($_POST['update_email'])) {
+    $newEmail = $_POST['fname'];
+    $updateQuery = "UPDATE prov SET pemail='$newEmail' WHERE pemail='$email'";
+    mysqli_query($db,$updateQuery);
+}
+
+if(isset($_POST['update_description'])) {
+    $newDescription = $_POST['des'];
+    $updateQuery = "UPDATE prov SET pdes='$newDescription' WHERE pemail='$email'";
+    mysqli_query($db,$updateQuery);
+}
+
+if(isset($_POST['update_address'])) {
+    $newAddress = $_POST['address'];
+    $updateQuery = "UPDATE prov SET padress='$newAddress' WHERE pemail='$email'";
+    mysqli_query($db,$updateQuery);
+
+}
+
+if(isset($_POST['update_city'])) {
+    $newCity = $_POST['city'];
+    $updateQuery = "UPDATE prov SET pcity='$newCity' WHERE pemail='$email'";
+    mysqli_query($db,$updateQuery);
+
+}
+
+if(isset($_POST['update_cost'])) {
+    $newCost = $_POST['bg'];
+    $updateQuery = "UPDATE prov SET cost='$newCost' WHERE pemail='$email'";
+    mysqli_query($db,$updateQuery);
+
+}
+
+if(isset($_POST['update_pincode'])) {
+    $newPincode = $_POST['pin'];
+    $updateQuery = "UPDATE prov SET pincode='$newPincode' WHERE pemail='$email'";
+    mysqli_query($db,$updateQuery);
+}
+?>
 
 
         <?php if (isset($_SESSION['message'])): ?>

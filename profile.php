@@ -76,6 +76,7 @@ include("connection.php");
     echo ("&nbsp Hello &nbsp&nbsp");
     echo ($sess);
     $sel=mysqli_query($db,"select * from myrec where email='$sess'");
+    $path="";
     if($sel)
     {
       while($data=mysqli_fetch_assoc($sel))
@@ -89,118 +90,151 @@ include("connection.php");
 
   <div class="profile-container">
     <form method="POST" enctype="multipart/form-data">
-    <div class="profile-details">
-      <h2>Profile Details</h2>
-      <table cellpadding="10px">
-        <tr>
-          <td><img class="profile-picture" height="10px" width="10px" src=" $path?>"></td>
-          <td><input type="file" name='upload'></td>
-          <td><input type="submit" name='sub' class="btn btn-info"></td>
-        </tr>
-        <?php
-        if(isset($_POST['sub'])){
-        if(isset($_FILES["upload"]) && $_FILES["upload"]["error"] == 0) {
-          $file_name = $_FILES["upload"]["name"];
-          $file_tmp = $_FILES["upload"]["tmp_name"];
-          $file_destination = "profile-pic/" . $file_name;
-      
-          if(move_uploaded_file($file_tmp, $file_destination)) {
-              // Insert data into database
-              $ins = "update myrec set profile_pic='$file_destination' where id='$uid'";
-              $ins_res=mysqli_query($db, $ins);
-              if($ins_res) {
-                  echo "<script>alert('Profile Updated');</script>";
-              } else {
-                  echo "<script>alert('Error');</script>";
-              }
-          } else {
-              // Error occurred while moving the uploaded file
-              echo "<script>alert('Error uploading file.');</script>";
-          }
-      } 
+        <div class="profile-details">
+            <h2>Profile Details</h2>
+            <table class="table table-bordered">
+                <tr>
+                    <td><img class="profile-picture" height="100px" width="100px" src="<?php echo $path ?>"></td>
+                    <td><input type="file" name='upload'></td>
+                    <td><input type="submit" name='sub' class="btn btn-info"></td>
+                </tr>
+                <?php
+                $name = "";
+                $contact = "";
+                $email = "";
+                $username = "";
+                $password = "";
+                $res = mysqli_query($db, "SELECT * FROM myrec WHERE email='$sess'");
+                if ($res) {
+                    $data = mysqli_fetch_assoc($res);
+                    $name = $data['name'];
+                    $contact = $data['contact'];
+                    $email = $data['email'];
+                    $username = $data['username'];
+                    $password = $data['password'];
+                }
+                ?>
+
+                <tr>
+                    <td>Name</td>
+                    <td><input type="text" name="new_name" class="form-control" value="<?php echo $name; ?>"></td>
+                    <td><button class="btn btn-info" name="update_name">Update</button></td>
+                </tr>
+
+                <tr>
+                    <td>Mobile</td>
+                    <td><input type="text" name="new_mobile" class="form-control" value="<?php echo $contact; ?>"></td>
+                    <td><button class="btn btn-info" name="update_mobile">Update</button></td>
+                </tr>
+
+                <tr>
+                    <td>Email</td>
+                    <td><input type="text" name="new_email" class="form-control" value="<?php echo $email; ?>"></td>
+                    <td><button class="btn btn-info" name="update_email">Update</button></td>
+                </tr>
+
+                <tr>
+                    <td>Username</td>
+                    <td><input type="text" name="new_username" class="form-control" value="<?php echo $username; ?>"></td>
+                    <td><button class="btn btn-info" name="update_username">Update</button></td>
+                </tr>
+
+                <tr>
+                    <td>Password</td>
+                    <td><input type="password" name="new_password" class="form-control" value="<?php echo $password; ?>"></td>
+                    <td><button class="btn btn-info" name="update_password">Update</button></td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</div>
+
+<?php
+if(isset($_POST['sub'])){
+    if(isset($_FILES["upload"]) && $_FILES["upload"]["error"] == 0) {
+        $file_name = $_FILES["upload"]["name"];
+        $file_tmp = $_FILES["upload"]["tmp_name"];
+        $file_destination = "profile-pic/" . $file_name;
+
+        if(move_uploaded_file($file_tmp, $file_destination)) {
+
+          $ins = "update myrec set profile_pic='$file_destination' where email='$sess'";
+            $ins_res=mysqli_query($db, $ins);
+        }
+    } 
+}
+?>
+
+
+<!-- Updation Logic-->
+<?php
+
+if(isset($_POST['update_name'])) {
+    $newName = $_POST['new_name'];
+    $updateQuery = "UPDATE myrec SET name='$newName' WHERE email='$sess'";
+    $result = mysqli_query($db, $updateQuery);
+    if($result) {
+        echo "<script>alert('Name Updated');</script>";
+    } else {
+        echo "<script>alert('Error updating name');</script>";
     }
-        ?>
-        <tr>
-          <td>Name</td>
-          <td>
-            <?php
-            include("connection.php");
-            $res = mysqli_query($db, "select name from myrec where email='$sess'");
-            if ($res) {
-              while ($data = mysqli_fetch_assoc($res)) {
-                echo ($data['name']);
-              }
-            }
-            ?>
-          </td>
-          <td><button class="btn btn-info">Update</button></td>
-        </tr>
-        <tr>
-          <td>Mobile</td>
-          <td>
-            <?php
-            $res = mysqli_query($db, "select contact from myrec where email='$sess'");
-            if ($res) {
-              while ($data = mysqli_fetch_assoc($res)) {
-                echo ($data['contact']);
-              }
-            }
-            ?>
-          </td>
-          <td><button class="btn btn-info">Update</button></td>
-        </tr>
+}
 
-        <tr>
-          <td>Email</td>
-          <td>
-            <?php
-            include("connection.php");
-            $res = mysqli_query($db, "select email from myrec where email='$sess'");
-            if ($res) {
-              while ($data = mysqli_fetch_assoc($res)) {
-                echo ($data['email']);
-              }
-            }
-            ?>
-          </td>
-          <td><button class="btn btn-info">Update</button></td>
-        </tr>
+if(isset($_POST['update_mobile'])) {
+    $newMobile = $_POST['new_mobile'];
+    $updateQuery = "UPDATE myrec SET contact='$newMobile' WHERE email='$sess'";
+    $result = mysqli_query($db, $updateQuery);
+    if($result) {
+        echo "<script>alert('Mobile Updated');</script>";
+    } else {
+        echo "<script>alert('Error updating mobile');</script>";
+    }
+}
 
-        <tr>
-          <td>Username</td>
-          <td>
-            <?php
-             $res = mysqli_query($db, "select username from myrec where email='$sess'");
-            if ($res) {
-              while ($data = mysqli_fetch_assoc($res)) {
-                echo ($data['username']);
-              }
-            }
-            ?>
-          </td>
-          <td><button class="btn btn-info">Update</button></td>
-        </tr>
-        <tr>
-          <td>Password</td>
-          <td>
-            <?php
-            $res = mysqli_query($db, "select password from myrec where email='$sess'");
-            if ($res) {
-              while ($data = mysqli_fetch_assoc($res)) {
-                echo ($data['password']);
-              }
-            }
-            ?>
-          </td>
-          <td><button class="btn btn-info"> Update </button></td>
-        </tr>
-      </table>
-    </div>
-  </form>
-  </div>
+if(isset($_POST['update_email'])) {
+    $newEmail = $_POST['new_email'];
+    $updateQuery = "UPDATE myrec SET email='$newEmail' WHERE email='$sess'";
+    $result = mysqli_query($db, $updateQuery);
+    if($result) {
+        echo "<script>alert('Email Updated');</script>";
+    } else {
+        echo "<script>alert('Error updating email');</script>";
+    }
+}
+
+if(isset($_POST['update_username'])) {
+    $newUsername = $_POST['new_username'];
+    $updateQuery = "UPDATE myrec SET username='$newUsername' WHERE email='$sess'";
+    $result = mysqli_query($db, $updateQuery);
+    if($result) {
+        echo "<script>alert('Username Updated');</script>";
+    } else {
+        echo "<script>alert('Error updating username');</script>";
+    }
+}
+
+if(isset($_POST['update_password'])) {
+    $newPassword = $_POST['new_password'];
+    $updateQuery = "UPDATE myrec SET password='$newPassword' WHERE email='$sess'";
+    $result = mysqli_query($db, $updateQuery);
+    if($result) {
+        echo "<script>alert('Password Updated');</script>";
+    } else {
+        echo "<script>alert('Error updating password');</script>";
+    }
+}
+?>
+
+
 
   <?php include "include/footer.php"?>
 
 </body>
 
 </html>
+
+
+
+
+
+
